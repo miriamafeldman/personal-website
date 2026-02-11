@@ -17,13 +17,13 @@ export default function Home() {
           better to shocks. 
           </p>
         <p className="text-gray-900 leading-relaxed mt-4">
-          Like many others, I believe we are on the cusp of significant AI-driven
-          changes to operating models in knowledge work, scientific, and industrial
+          Like many others, I believe we are on the cusp of major AI-driven
+          changes to operating models across knowledge work, scientific discovery, and industrial
           contexts. With that in mind, I'll be spending this year researching strategic alliances for innovation and applications of
           AI to R&D at the <a href="https://bcghendersoninstitute.com/" target="_blank" className="underline hover:font-bold" style={{ color: '#2159ff' }}>BCG Henderson Institute</a>.
         </p>
         <p className="text-gray-900 leading-relaxed mt-4">
-          I spend spare hours working at the intersection of
+          I spend my spare working hours focused on the intersection of
           strategy and the arts. Since 2023, I've supported the creation of an Arts &
           Culture-specific industry team in BCG's London office and dedication of annual
           pro bono budget. It's a privilege to work with the UK's world-leading cultural
@@ -33,7 +33,7 @@ published a report on the <a href="https://www.bcg.com/united-kingdom/centre-for
 statement of many of our priorities.
         </p>
         <p className="text-gray-900 leading-relaxed mt-4">
-          Outside of work, I can reliably be found in the ceramics studio or exploring London's galleries and theatres.
+          Outside of the office, I can reliably be found in the ceramics studio or exploring London's galleries and theatres.
         </p>
       </section>
 
