@@ -1,5 +1,18 @@
+
+
+:root {
+  --blue: #2159ff;
+  --red: #d34016;
+  --olive: #a59d32;
+  --gold: #f6bf27;
+  --offwhite: #e3ded2;
+  --brown: #55311a;
+  --black: #000000;
+  --white: #ffffff;
+}
+
 @import "tailwindcss";
 
 body {
-  background-color: #e3ded2;
+  background-color: var(--offwhite);
 }
