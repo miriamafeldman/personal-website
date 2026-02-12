@@ -30,7 +30,7 @@ published a report on the <a href="https://www.bcg.com/united-kingdom/centre-for
 statement of many of our priorities.
         </p>
         <p className="text-gray-900 leading-relaxed mt-4">
-          Nights and weekends, I can reliably be found in the ceramics studio or exploring London's galleries and theatres.
+          Nights and weekends, I can reliably be found in the ceramics studio, exploring London's <a href="/galleries" className="underline hover:font-bold" style={{ color: 'var(--olive)' }}>galleries</a>, or sitting down to <a href="/reading" className="underline hover:font-bold" style={{ color: 'var(--olive)' }}>read</a>.
         </p>
       </section>
 
