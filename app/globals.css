@@ -16,3 +16,12 @@
 body {
   background-color: var(--offwhite);
 }
+
+.home-link {
+  color: var(--black);
+  transition: color 0.2s ease;
+}
+
+.home-link:hover {
+  color: var(--red);
+}

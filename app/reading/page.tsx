@@ -108,12 +108,13 @@ function parseBooksCSV(text: string): Book[] {
 // ============================================
 function Stars({ rating }: { rating: number }) {
   return (
-    <span style={{ color: 'var(--gold)', letterSpacing: '1px' }}>
-      {'★'.repeat(rating)}
-      {'☆'.repeat(5 - rating)}
+    <span style={{ letterSpacing: '1px' }}>
+      <span style={{ color: 'var(--gold)', letterSpacing: '1px', WebkitTextStroke: '0.5px var(--brown)' }}>{'★'.repeat(rating)}</span>
+      <span style={{ color: 'var(--brown)' }}>{'☆'.repeat(5 - rating)}</span>
     </span>
   );
 }
+
 
 // ============================================
 // Toggle Switch Component
