@@ -30,12 +30,10 @@ body {
 /* ------------------ Text selection ------------------ */
 ::selection {
   background-color: var(--white);
-  color: var(--black);
 }
 
 ::-moz-selection {
   background-color: var(--white);
-  color: var(--black);
 }
 
 /* ------------------ Hover cursor for default clickable elements ------------------ */
