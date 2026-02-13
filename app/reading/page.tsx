@@ -171,33 +171,67 @@ function ToggleSwitch({
   activeTab: 'articles' | 'books';
   onToggle: (tab: 'articles' | 'books') => void;
 }) {
-  const isBooks = activeTab === 'books';
+  const isArticles = activeTab === 'articles';
+
   return (
     <div className="flex items-center justify-center gap-4 text-lg">
+      
+      {/* LEFT: Books */}
       <span
         className="clickable"
-        style={{ fontWeight: !isBooks ? 'bold' : 'normal', opacity: !isBooks ? 1 : 0.5, transition: 'all 0.3s ease' }}
-        onClick={() => onToggle('articles')}
-      >
-        An article
-      </span>
-      <div
-        className="clickable"
-        onClick={() => onToggle(isBooks ? 'articles' : 'books')}
-        style={{ width: '56px', height: '28px', borderRadius: '14px', backgroundColor: isBooks ? 'var(--brown)' : 'var(--gold)', position: 'relative', transition: 'background-color 0.3s ease' }}
-      >
-        <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: 'var(--offwhite)', position: 'absolute', top: '3px', left: isBooks ? '31px' : '3px', transition: 'left 0.3s ease' }} />
-      </div>
-      <span
-        className="clickable"
-        style={{ fontWeight: isBooks ? 'bold' : 'normal', opacity: isBooks ? 1 : 0.5, transition: 'all 0.3s ease' }}
+        style={{
+          fontWeight: !isArticles ? 'bold' : 'normal',
+          opacity: !isArticles ? 1 : 0.5,
+          transition: 'all 0.3s ease',
+        }}
         onClick={() => onToggle('books')}
       >
         A book
       </span>
+
+      {/* SWITCH */}
+      <div
+        className="clickable"
+        onClick={() => onToggle(isArticles ? 'books' : 'articles')}
+        style={{
+          width: '56px',
+          height: '28px',
+          borderRadius: '14px',
+          backgroundColor: isArticles ? 'var(--brown)' : 'var(--gold)',
+          position: 'relative',
+          transition: 'background-color 0.3s ease',
+        }}
+      >
+        <div
+          style={{
+            width: '22px',
+            height: '22px',
+            borderRadius: '50%',
+            backgroundColor: 'var(--offwhite)',
+            position: 'absolute',
+            top: '3px',
+            left: isArticles ? '31px' : '3px', // ← flipped direction
+            transition: 'left 0.3s ease',
+          }}
+        />
+      </div>
+
+      {/* RIGHT: Articles */}
+      <span
+        className="clickable"
+        style={{
+          fontWeight: isArticles ? 'bold' : 'normal',
+          opacity: isArticles ? 1 : 0.5,
+          transition: 'all 0.3s ease',
+        }}
+        onClick={() => onToggle('articles')}
+      >
+        An article
+      </span>
     </div>
   );
 }
+
 
 // ============================================
 // Mini Rating Toggle
@@ -562,7 +596,17 @@ function ArticlesTable({ articles }: { articles: Article[] }) {
           const highlight = hoveredRow === index ? 'var(--gold)' : 'transparent';
           const cellStyle = { backgroundColor: highlight, transition: 'background-color 0.2s ease', padding: '2px 0', boxDecorationBreak: 'clone' as const, WebkitBoxDecorationBreak: 'clone' as const };
           return (
-            <tr key={index} onMouseEnter={() => setHoveredRow(index)} onMouseLeave={() => setHoveredRow(null)}>
+            <tr
+                  key={index}
+                  className={article.url ? 'clickable' : ''}
+                  onMouseEnter={() => setHoveredRow(index)}
+                  onMouseLeave={() => setHoveredRow(null)}
+                  onClick={() => {
+                    if (article.url) {
+                      window.open(article.url, '_blank');
+                    }
+                  }}
+                >
               <td className="py-3 pr-8">
                 {article.url ? (
                   <a href={article.url} target="_blank" style={{ textDecoration: 'none', color: 'inherit' }}>
