@@ -636,7 +636,7 @@ function BooksTable({ books }: { books: Book[] }) {
             <th className="text-left pb-4 pr-8 font-normal" style={{ width: '28%' }}>Title</th>
             <th className="text-left pb-4 pr-8 font-normal italic" style={{ width: '16%' }}>Author</th>
             <th className="text-left pb-4 pr-8 font-normal" style={{ width: '9%' }}>Published</th>
-            <th className="text-left pb-4 pr-8 font-normal" style={{ width: '9%' }}>Year Read</th>
+            <th className="text-left pb-4 pr-8 font-normal" style={{ width: '9%' }}>Read</th>
             <th className="text-left pb-4 pr-4 font-normal" style={{ width: '22%' }}>
               <div>
                 <span>My Rating</span>
