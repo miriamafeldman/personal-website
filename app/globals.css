@@ -52,3 +52,18 @@ button:hover,
 .clickable:hover {
   cursor: url("/cursors/astro_link.png") 6 0, pointer !important;
 }
+
+/* ------------------ Smooth quotes for Books page ------------------ */
+
+@keyframes quoteReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 300px;
+  }
+}

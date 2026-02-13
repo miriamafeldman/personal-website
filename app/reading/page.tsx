@@ -21,6 +21,7 @@ interface Book {
   ratingFirst: number;
   ratingEOY: number;
   goodreads: number;
+  quote: string;
 }
 
 function parseCSV(text: string): string[][] {
@@ -85,11 +86,12 @@ function parseBooksCSV(text: string): Book[] {
     ratingFirst: parseFloat(row[4]) || 0,
     ratingEOY: parseFloat(row[5]) || 0,
     goodreads: parseFloat(row[6]) || 0,
+    quote: row[7] || '',
   }));
 }
 
 // ============================================
-// Half-star rating component
+// Half-star rating component (SVG)
 // ============================================
 function Stars({ rating }: { rating: number }) {
   const rounded = Math.max(0, Math.min(5, Math.round(rating * 2) / 2));
@@ -138,7 +140,7 @@ function Stars({ rating }: { rating: number }) {
 function RatingChange({ diff, visible }: { diff: number; visible: boolean }) {
   if (diff === 0 || !visible) return null;
   const isPositive = diff > 0;
-  const displayDiff = Math.round(diff * 2) / 2; // round to 0.5
+  const displayDiff = Math.round(diff * 2) / 2;
   const displayText = isPositive ? `+${displayDiff}` : `${displayDiff}`;
   return (
     <span
@@ -175,8 +177,6 @@ function ToggleSwitch({
 
   return (
     <div className="flex items-center justify-center gap-4 text-lg">
-      
-      {/* LEFT: Books */}
       <span
         className="clickable"
         style={{
@@ -189,7 +189,6 @@ function ToggleSwitch({
         A book
       </span>
 
-      {/* SWITCH */}
       <div
         className="clickable"
         onClick={() => onToggle(isArticles ? 'books' : 'articles')}
@@ -210,13 +209,12 @@ function ToggleSwitch({
             backgroundColor: 'var(--offwhite)',
             position: 'absolute',
             top: '3px',
-            left: isArticles ? '31px' : '3px', // ← flipped direction
+            left: isArticles ? '31px' : '3px',
             transition: 'left 0.3s ease',
           }}
         />
       </div>
 
-      {/* RIGHT: Articles */}
       <span
         className="clickable"
         style={{
@@ -231,7 +229,6 @@ function ToggleSwitch({
     </div>
   );
 }
-
 
 // ============================================
 // Mini Rating Toggle
@@ -303,7 +300,7 @@ function FilterPill({
 }
 
 // ============================================
-// Filter Bar
+// Author Search
 // ============================================
 function AuthorSearch({
   authors,
@@ -368,7 +365,9 @@ function AuthorSearch({
   );
 }
 
-
+// ============================================
+// Filter Bar
+// ============================================
 function BookFilters({
   books,
   authorFilter,
@@ -414,11 +413,6 @@ function BookFilters({
         <span style={{ fontSize: '13px', color: 'var(--brown)', fontWeight: 'bold' }}>Filter:</span>
 
         <FilterPill
-          label={authorFilter ? `Author: ${authorFilter}` : 'Author'}
-          active={!!authorFilter}
-          onClick={() => { closeAll(); setShowAuthors(!showAuthors); }}
-        />
-        <FilterPill
           label={decadeFilter ? `Published: ${decadeFilter}` : 'Published'}
           active={!!decadeFilter}
           onClick={() => { closeAll(); setShowDecades(!showDecades); }}
@@ -433,6 +427,11 @@ function BookFilters({
           active={!!ratingFilter}
           onClick={() => { closeAll(); setShowRatings(!showRatings); }}
         />
+        <FilterPill
+          label={authorFilter ? `Author: ${authorFilter}` : 'Author'}
+          active={!!authorFilter}
+          onClick={() => { closeAll(); setShowAuthors(!showAuthors); }}
+        />
 
         {hasActiveFilter && (
           <button
@@ -444,14 +443,6 @@ function BookFilters({
           </button>
         )}
       </div>
-
-      {showAuthors && (
-  <AuthorSearch
-    authors={authors}
-    authorFilter={authorFilter}
-    onSelect={(author) => { setAuthorFilter(author); setShowAuthors(false); }}
-  />
-    )}
 
       {showDecades && (
         <div className="flex flex-wrap gap-2" style={{ marginTop: '12px', paddingLeft: '52px' }}>
@@ -514,6 +505,14 @@ function BookFilters({
             </button>
           ))}
         </div>
+      )}
+
+      {showAuthors && (
+        <AuthorSearch
+          authors={authors}
+          authorFilter={authorFilter}
+          onSelect={(author) => { setAuthorFilter(author); setShowAuthors(false); }}
+        />
       )}
     </div>
   );
@@ -597,16 +596,16 @@ function ArticlesTable({ articles }: { articles: Article[] }) {
           const cellStyle = { backgroundColor: highlight, transition: 'background-color 0.2s ease', padding: '2px 0', boxDecorationBreak: 'clone' as const, WebkitBoxDecorationBreak: 'clone' as const };
           return (
             <tr
-                  key={index}
-                  className={article.url ? 'clickable' : ''}
-                  onMouseEnter={() => setHoveredRow(index)}
-                  onMouseLeave={() => setHoveredRow(null)}
-                  onClick={() => {
-                    if (article.url) {
-                      window.open(article.url, '_blank');
-                    }
-                  }}
-                >
+              key={index}
+              className={article.url ? 'clickable' : ''}
+              onMouseEnter={() => setHoveredRow(index)}
+              onMouseLeave={() => setHoveredRow(null)}
+              onClick={() => {
+                if (article.url) {
+                  window.open(article.url, '_blank');
+                }
+              }}
+            >
               <td className="py-3 pr-8">
                 {article.url ? (
                   <a href={article.url} target="_blank" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -638,6 +637,7 @@ function BooksTable({ books }: { books: Book[] }) {
   const [decadeFilter, setDecadeFilter] = useState<string | null>(null);
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
   const [yearReadFilter, setYearReadFilter] = useState<string | null>(null);
+  const [expandedQuote, setExpandedQuote] = useState<number | null>(null);
 
   const handleRatingToggle = (rating: 'first' | 'eoy') => {
     setActiveRating(rating);
@@ -660,6 +660,8 @@ function BooksTable({ books }: { books: Book[] }) {
     return true;
   });
 
+  const numCols = 6;
+
   return (
     <div>
       <BookFilters
@@ -679,8 +681,8 @@ function BooksTable({ books }: { books: Book[] }) {
           <tr style={{ color: 'var(--black)' }}>
             <th className="text-left pb-4 pr-8 font-normal" style={{ width: '28%' }}>Title</th>
             <th className="text-left pb-4 pr-8 font-normal italic" style={{ width: '16%' }}>Author</th>
-            <th className="text-left pb-4 pr-8 font-normal" style={{ width: '9%' }}>Published</th>
-            <th className="text-left pb-4 pr-8 font-normal" style={{ width: '9%' }}>Read</th>
+            <th className="text-left pb-4 pr-8 font-normal" style={{ width: '7%' }}>Published</th>
+            <th className="text-left pb-4 pr-8 font-normal" style={{ width: '11%' }}>Read</th>
             <th className="text-left pb-4 pr-4 font-normal" style={{ width: '22%' }}>
               <div>
                 <span>My Rating</span>
@@ -692,21 +694,117 @@ function BooksTable({ books }: { books: Book[] }) {
         </thead>
         <tbody>
           {filteredBooks.map((book, index) => {
+            const isExpanded = expandedQuote === index;
             const highlight = hoveredRow === index ? 'var(--gold)' : 'transparent';
             const cellStyle = { backgroundColor: highlight, transition: 'background-color 0.2s ease', padding: '2px 0', boxDecorationBreak: 'clone' as const, WebkitBoxDecorationBreak: 'clone' as const };
             const currentRating = activeRating === 'first' ? book.ratingFirst : book.ratingEOY;
             const hasEOY = book.ratingEOY > 0;
             const diff = hasEOY ? book.ratingEOY - book.ratingFirst : 0;
             const isFiveStar = book.ratingFirst === 5 || book.ratingEOY === 5;
+            const hasQuote = (book.quote || '').length > 0;
+
+            if (isExpanded) {
+return (
+                <tr
+                  key={index}
+                  className="clickable"
+                  onClick={() => setExpandedQuote(null)}
+                >
+                  <td
+                    colSpan={numCols}
+                    style={{
+                      position: 'relative',
+                      borderTop: '1px solid var(--gold)',
+                      borderBottom: '1px solid var(--gold)',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <div
+                      style={{
+                        padding: '24px 32px',
+                        opacity: 1,
+                        transform: 'translateY(0)',
+                        animation: 'quoteReveal 0.4s ease-out',
+                      }}
+                    >
+                      <span
+                        onClick={(e) => { e.stopPropagation(); setExpandedQuote(null); }}
+                        style={{
+                          position: 'absolute',
+                          top: '8px',
+                          right: '12px',
+                          color: 'var(--black)',
+                          fontSize: '14px',
+                          opacity: 0.5,
+                          lineHeight: 1,
+                        }}
+                      >
+                        ✕
+                      </span>
+
+                      <p
+                        className="italic"
+                        style={{
+                          color: 'var(--black)',
+                          fontSize: '16px',
+                          lineHeight: '1.7',
+                          maxWidth: '80%',
+                          margin: '0 auto',
+                          textAlign: 'center',
+                        }}
+                      >
+                        &ldquo;{book.quote}&rdquo;
+                      </p>
+
+                      <p
+                        style={{
+                          color: 'var(--brown)',
+                          fontSize: '12px',
+                          opacity: 0.5,
+                          textAlign: 'center',
+                          marginTop: '12px',
+                        }}
+                      >
+                        — {book.author}, <span className="italic">{book.title}</span>
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              );
+            }
 
             return (
               <tr
                 key={index}
                 onMouseEnter={() => setHoveredRow(index)}
                 onMouseLeave={() => setHoveredRow(null)}
+                className={hasQuote ? 'clickable' : ''}
+                onClick={() => {
+                  if (hasQuote) {
+                    setExpandedQuote(expandedQuote === index ? null : index);
+                  }
+                }}
                 style={{ fontWeight: isFiveStar ? 'bold' : 'normal' }}
               >
-                <td className="py-3 pr-8"><span style={cellStyle}>{book.title}</span></td>
+                <td className="py-3 pr-8">
+                  <span style={cellStyle}>
+                    {book.title}
+                    {hasQuote && (
+                      <span
+                        style={{
+                          display: 'inline-block',
+                          marginLeft: '6px',
+                          fontSize: '11px',
+                          color: 'var(--brown)',
+                          opacity: 0.6,
+                          verticalAlign: 'middle',
+                        }}
+                      >
+                        ❝
+                      </span>
+                    )}
+                  </span>
+                </td>
                 <td className="py-3 pr-8"><span style={cellStyle} className="italic">{book.author}</span></td>
                 <td className="py-3 pr-8"><span style={cellStyle}>{book.published}</span></td>
                 <td className="py-3 pr-8"><span style={cellStyle}>{book.yearRead}</span></td>
