@@ -271,6 +271,70 @@ function FilterPill({
 // ============================================
 // Filter Bar
 // ============================================
+function AuthorSearch({
+  authors,
+  authorFilter,
+  onSelect,
+}: {
+  authors: string[];
+  authorFilter: string | null;
+  onSelect: (author: string | null) => void;
+}) {
+  const [search, setSearch] = useState('');
+  const filtered = authors.filter(a => a.toLowerCase().includes(search.toLowerCase()));
+
+  return (
+    <div style={{ marginTop: '12px', paddingLeft: '52px' }}>
+      <input
+        type="text"
+        placeholder="Type to search authors..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        autoFocus
+        style={{
+          padding: '6px 12px',
+          borderRadius: '12px',
+          border: '1px solid var(--olive)',
+          backgroundColor: 'transparent',
+          fontSize: '13px',
+          outline: 'none',
+          width: '220px',
+          marginBottom: '8px',
+        }}
+      />
+      <div className="flex flex-wrap gap-2">
+        {filtered.slice(0, 15).map(author => (
+          <button
+            key={author}
+            className="clickable"
+            onClick={() => onSelect(authorFilter === author ? null : author)}
+            style={{
+              padding: '3px 10px',
+              borderRadius: '12px',
+              fontSize: '12px',
+              border: '1px solid var(--olive)',
+              backgroundColor: authorFilter === author ? 'var(--olive)' : 'transparent',
+              color: authorFilter === author ? 'var(--offwhite)' : 'var(--olive)',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            {author}
+          </button>
+        ))}
+        {filtered.length > 15 && (
+          <span style={{ fontSize: '12px', color: 'var(--brown)', opacity: 0.5, padding: '3px 6px' }}>
+            +{filtered.length - 15} more — keep typing...
+          </span>
+        )}
+        {filtered.length === 0 && (
+          <span style={{ fontSize: '12px', color: 'var(--brown)', opacity: 0.5 }}>No matches</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
 function BookFilters({
   books,
   authorFilter,
@@ -348,25 +412,12 @@ function BookFilters({
       </div>
 
       {showAuthors && (
-        <div className="flex flex-wrap gap-2" style={{ marginTop: '12px', paddingLeft: '52px' }}>
-          {authors.map(author => (
-            <button
-              key={author}
-              className="clickable"
-              onClick={() => { setAuthorFilter(authorFilter === author ? null : author); setShowAuthors(false); }}
-              style={{
-                padding: '3px 10px', borderRadius: '12px', fontSize: '12px',
-                border: '1px solid var(--olive)',
-                backgroundColor: authorFilter === author ? 'var(--olive)' : 'transparent',
-                color: authorFilter === author ? 'var(--offwhite)' : 'var(--olive)',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              {author}
-            </button>
-          ))}
-        </div>
-      )}
+  <AuthorSearch
+    authors={authors}
+    authorFilter={authorFilter}
+    onSelect={(author) => { setAuthorFilter(author); setShowAuthors(false); }}
+  />
+    )}
 
       {showDecades && (
         <div className="flex flex-wrap gap-2" style={{ marginTop: '12px', paddingLeft: '52px' }}>
@@ -438,7 +489,7 @@ function BookFilters({
 // Main Component
 // ============================================
 export default function ReadingList() {
-  const [activeTab, setActiveTab] = useState<'articles' | 'books'>('articles');
+  const [activeTab, setActiveTab] = useState<'articles' | 'books'>('books');
   const [articles, setArticles] = useState<Article[]>([]);
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
