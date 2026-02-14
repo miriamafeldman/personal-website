@@ -1,6 +1,6 @@
-'use client';
+﻿'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useId } from 'react';
 
 // ============================================
 // DATA LOADING FROM CSV FILES
@@ -93,47 +93,53 @@ function parseBooksCSV(text: string): Book[] {
 // ============================================
 // Half-star rating component (SVG)
 // ============================================
+const STAR_SIZE = 16;
+
+function FullStarIcon() {
+  return (
+    <svg width={STAR_SIZE} height={STAR_SIZE} viewBox="0 0 24 24" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--gold)" stroke="var(--brown)" strokeWidth="1" />
+    </svg>
+  );
+}
+
+function HalfStarIcon({ clipId }: { clipId: string }) {
+  return (
+    <svg width={STAR_SIZE} height={STAR_SIZE} viewBox="0 0 24 24" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+      <defs>
+        <clipPath id={clipId}>
+          <rect x="0" y="0" width="12" height="24" />
+        </clipPath>
+      </defs>
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="none" stroke="var(--brown)" strokeWidth="1" />
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--gold)" stroke="var(--brown)" strokeWidth="1" clipPath={`url(#${clipId})`} />
+    </svg>
+  );
+}
+
+function EmptyStarIcon() {
+  return (
+    <svg width={STAR_SIZE} height={STAR_SIZE} viewBox="0 0 24 24" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="none" stroke="var(--brown)" strokeWidth="1" />
+    </svg>
+  );
+}
+
 function Stars({ rating }: { rating: number }) {
   const rounded = Math.max(0, Math.min(5, Math.round(rating * 2) / 2));
   const fullStars = Math.floor(rounded);
   const hasHalf = rounded % 1 !== 0;
   const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
-
-  const starSize = 16;
-
-  const FullStar = () => (
-    <svg width={starSize} height={starSize} viewBox="0 0 24 24" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--gold)" stroke="var(--brown)" strokeWidth="1" />
-    </svg>
-  );
-
-  const HalfStar = () => (
-    <svg width={starSize} height={starSize} viewBox="0 0 24 24" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-      <defs>
-        <clipPath id="halfClip">
-          <rect x="0" y="0" width="12" height="24" />
-        </clipPath>
-      </defs>
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="none" stroke="var(--brown)" strokeWidth="1" />
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--gold)" stroke="var(--brown)" strokeWidth="1" clipPath="url(#halfClip)" />
-    </svg>
-  );
-
-  const EmptyStar = () => (
-    <svg width={starSize} height={starSize} viewBox="0 0 24 24" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="none" stroke="var(--brown)" strokeWidth="1" />
-    </svg>
-  );
+  const clipId = `${useId()}-halfClip`;
 
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0px', whiteSpace: 'nowrap' }}>
-      {Array.from({ length: fullStars }).map((_, i) => <FullStar key={`f${i}`} />)}
-      {hasHalf && <HalfStar key="h" />}
-      {Array.from({ length: emptyStars }).map((_, i) => <EmptyStar key={`e${i}`} />)}
+      {Array.from({ length: fullStars }).map((_, i) => <FullStarIcon key={`f${i}`} />)}
+      {hasHalf && <HalfStarIcon key="h" clipId={clipId} />}
+      {Array.from({ length: emptyStars }).map((_, i) => <EmptyStarIcon key={`e${i}`} />)}
     </span>
   );
 }
-
 // ============================================
 // Rating change badge
 // ============================================
@@ -835,3 +841,4 @@ return (
     </div>
   );
 }
+

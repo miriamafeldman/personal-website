@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import HomeLink from "./components/HomeLink";
+import SiteHeader from "./components/SiteHeader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Miriam A Feldman",
-  description: "",
+  title: "Miriam Ames Feldman",
+  description: "A personal week-view website for Miriam Ames Feldman.",
 };
 
 export default function RootLayout({
@@ -25,10 +25,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <HomeLink />
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <SiteHeader />
         {children}
       </body>
     </html>
