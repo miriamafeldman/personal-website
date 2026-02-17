@@ -34,7 +34,7 @@ const dayLabels = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Frid
 const dayShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const timelineStart = 8;
 const timelineEnd = 21;
-const timelineMarks = [8, 10, 12, 14, 16, 18, 20];
+const timelineMarks = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 
 // Pale = resting state, full = hovered state
 const colorTones: Record<
@@ -46,40 +46,54 @@ const colorTones: Record<
   }
 > = {
   blue: {
-    pale: "rgba(33, 89, 255, 0.12)",
-    full: "rgba(33, 89, 255, 0.7)",
+    pale: "rgba(33, 89, 255, 0.5)",
+    full: "rgba(33, 89, 255, 0.9)",
     accent: "var(--blue)",
   },
   red: {
-    pale: "rgba(211, 64, 22, 0.12)",
-    full: "rgba(211, 64, 22, 0.7)",
+    pale: "rgba(211, 64, 22, 0.5)",
+    full: "rgba(211, 64, 22, 1)",
     accent: "var(--red)",
   },
   olive: {
-    pale: "rgba(165, 157, 50, 0.14)",
-    full: "rgba(165, 157, 50, 0.7)",
+    pale: "rgba(165, 157, 50, 0.5)",
+    full: "rgba(165, 157, 50, 1)",
     accent: "var(--olive)",
   },
   gold: {
-    pale: "rgba(246, 191, 39, 0.16)",
-    full: "rgba(246, 191, 39, 0.7)",
+    pale: "rgba(246, 191, 39, 0.5)",
+    full: "rgba(246, 191, 39, 1)",
     accent: "var(--gold)",
   },
 };
 
 const calendarEvents: CalendarEvent[] = [
+  // SUNDAY - Read + Gallery
   {
-    id: "sun-ceramics",
+    id: "sun-read",
     day: 0,
-    title: "Ceramics",
-    time: "9:30-12:30",
-    start: 9.5,
-    end: 12.5,
-    href: "/studio",
+    title: "Read",
+    time: "8:30-10:30",
+    start: 8.5,
+    end: 10.5,
+    href: "/reading",
+    color: "gold",
+    primary: true,
+    statusDay: "Sunday morning",
+    statusActivity: "reading",
+  },
+  {
+    id: "sun-gallery",
+    day: 0,
+    title: "Gallery",
+    time: "11:00-2:00",
+    start: 11,
+    end: 14,
+    href: "/galleries",
     color: "olive",
     primary: true,
     statusDay: "Sunday afternoon",
-    statusActivity: "at the studio",
+    statusActivity: "at a gallery",
   },
   {
     id: "sun-flight",
@@ -93,11 +107,12 @@ const calendarEvents: CalendarEvent[] = [
     statusDay: "Sunday evening",
     statusActivity: "in transit",
   },
+  // MONDAY
   {
     id: "mon-commute",
     day: 1,
     title: "Commute",
-    time: "8:00-9:00",
+    time: "8:00-8:45",
     start: 8,
     end: 8.75,
     href: "/reading",
@@ -132,11 +147,12 @@ const calendarEvents: CalendarEvent[] = [
     statusDay: "Monday",
     statusActivity: "at the office",
   },
+  // TUESDAY
   {
     id: "tue-commute",
     day: 2,
     title: "Commute",
-    time: "8:00-9:00",
+    time: "8:00-8:45",
     start: 8,
     end: 8.75,
     href: "/reading",
@@ -171,11 +187,12 @@ const calendarEvents: CalendarEvent[] = [
     statusDay: "Tuesday",
     statusActivity: "at the office",
   },
+  // WEDNESDAY
   {
     id: "wed-commute",
     day: 3,
     title: "Commute",
-    time: "8:00-9:00",
+    time: "8:00-8:45",
     start: 8,
     end: 8.75,
     href: "/reading",
@@ -210,11 +227,12 @@ const calendarEvents: CalendarEvent[] = [
     statusDay: "Wednesday",
     statusActivity: "at the office",
   },
+  // THURSDAY
   {
     id: "thu-commute",
     day: 4,
     title: "Commute",
-    time: "8:00-9:00",
+    time: "8:00-8:45",
     start: 8,
     end: 8.75,
     href: "/reading",
@@ -240,9 +258,9 @@ const calendarEvents: CalendarEvent[] = [
     id: "thu-work-pm",
     day: 4,
     title: "Work",
-    time: "1:30-3:00",
+    time: "1:30-2:45",
     start: 13.5,
-    end: 15,
+    end: 14.75,
     href: "/work",
     color: "blue",
     primary: false,
@@ -262,11 +280,12 @@ const calendarEvents: CalendarEvent[] = [
     statusDay: "Thursday afternoon",
     statusActivity: "in a board meeting",
   },
+  // FRIDAY
   {
     id: "fri-commute",
     day: 5,
     title: "Commute",
-    time: "8:00-9:00",
+    time: "8:00-8:45",
     start: 8,
     end: 8.75,
     href: "/reading",
@@ -314,31 +333,19 @@ const calendarEvents: CalendarEvent[] = [
     statusDay: "Friday night",
     statusActivity: "out to dinner in London",
   },
+  // SATURDAY - Ceramics + Dinner
   {
-    id: "sat-read",
+    id: "sat-ceramics",
     day: 6,
-    title: "Read",
-    time: "8:30-10:30",
-    start: 8.5,
-    end: 10.5,
-    href: "/reading",
-    color: "gold",
-    primary: false,
-    statusDay: "Saturday morning",
-    statusActivity: "reading",
-  },
-  {
-    id: "sat-gallery",
-    day: 6,
-    title: "Gallery",
-    time: "11:00-2:00",
-    start: 11,
-    end: 14,
-    href: "/galleries",
+    title: "Ceramics",
+    time: "9:30-12:30",
+    start: 9.5,
+    end: 12.5,
+    href: "/studio",
     color: "olive",
     primary: true,
-    statusDay: "Saturday afternoon",
-    statusActivity: "at the gallery",
+    statusDay: "Saturday morning",
+    statusActivity: "at the studio",
   },
   {
     id: "sat-dinner",
@@ -368,7 +375,7 @@ function getDefaultStatus(now: Date): StatusLine {
   }
 
   if (day === 0 && hour >= 12 && hour < 16) {
-    return { day: "Sunday morning", activity: "at the studio", color: "olive" };
+    return { day: "Sunday afternoon", activity: "at the gallery", color: "olive" };
   }
 
   if (day === 4 && hour >= 15 && hour < 19) {
@@ -383,11 +390,11 @@ function getDefaultStatus(now: Date): StatusLine {
     return { day: dayLabels[day], activity: "at the office", color: "blue" };
   }
 
-  if (day === 6 && hour >= 11 && hour < 16) {
-    return { day: "Saturday afternoon", activity: "at the gallery", color: "olive" };
+  if (day === 6 && hour >= 9 && hour < 13) {
+    return { day: "Saturday morning", activity: "at the studio", color: "olive" };
   }
 
-  if (day === 6 && hour >= 16) {
+  if (day === 6 && hour >= 18) {
     return { day: "Saturday night", activity: "out to dinner in London", color: "red" };
   }
 
@@ -400,6 +407,13 @@ function toTopPercent(start: number): number {
 
 function toHeightPercent(start: number, end: number): number {
   return ((end - start) / (timelineEnd - timelineStart)) * 100;
+}
+
+// Format hour marks for the grid
+function formatHour(hour: number): string {
+  if (hour === 12) return "12 PM";
+  if (hour > 12) return `${hour - 12} PM`;
+  return `${hour} AM`;
 }
 
 export default function Home() {
@@ -430,8 +444,8 @@ export default function Home() {
     const isHighlighted = isDirectHover || isGroupHover;
     return {
       backgroundColor: isHighlighted ? tones.full : tones.pale,
-      borderColor: "rgba(85, 49, 26, 0.18)",
-      transition: "background-color 0.2s ease",
+      borderColor: isHighlighted ? "rgba(85, 49, 26, 0.25)" : "rgba(85, 49, 26, 0.12)",
+      transition: "background-color 0.2s ease, border-color 0.2s ease",
     };
   };
 
@@ -479,33 +493,58 @@ export default function Home() {
         It&apos;s <span className="status-accent">{status.day}</span> and Miriam is <span className="status-accent">{status.activity}</span>
       </h1>
 
+      {/* Desktop grid calendar */}
       <section className="calendar-grid-wrap" aria-label="Weekly calendar">
-        <div className="calendar-grid">
-          {dayLabels.map((day, dayIndex) => (
-            <article key={day} className="day-column">
-              <h2 className="day-label">{day}</h2>
-              <div className="day-events">
-                {timelineMarks.map((mark) => (
-                  <div key={`${day}-${mark}`} className="day-track-line" style={{ top: `${toTopPercent(mark)}%` }} />
-                ))}
-
-                {eventsByDay[dayIndex].map((event) => {
-                  const top = toTopPercent(event.start);
-                  const height = toHeightPercent(event.start, event.end);
-                  const eventStyle: CSSProperties = {
-                    ...getCardStyle(event),
-                    top: `calc(${top}% + 2px)`,
-                    height: `calc(${height}% - 4px)`,
-                  };
-
-                  return renderEventCard(event, eventStyle);
-                })}
+        <div className="calendar-grid-bg">
+          {/* Time labels on left */}
+          <div className="calendar-time-labels">
+            {timelineMarks.map((mark) => (
+              <div
+                key={mark}
+                className="calendar-time-label"
+                style={{ top: `${toTopPercent(mark)}%` }}
+              >
+                {formatHour(mark)}
               </div>
-            </article>
-          ))}
+            ))}
+          </div>
+
+          {/* Grid area */}
+          <div className="calendar-grid">
+            {/* Horizontal grid lines spanning all columns */}
+            <div className="calendar-grid-lines">
+              {timelineMarks.map((mark) => (
+                <div
+                  key={mark}
+                  className="calendar-grid-line"
+                  style={{ top: `${toTopPercent(mark)}%` }}
+                />
+              ))}
+            </div>
+
+            {dayLabels.map((day, dayIndex) => (
+              <article key={day} className="day-column">
+                <h2 className="day-label">{day}</h2>
+                <div className="day-events">
+                  {eventsByDay[dayIndex].map((event) => {
+                    const top = toTopPercent(event.start);
+                    const height = toHeightPercent(event.start, event.end);
+                    const eventStyle: CSSProperties = {
+                      ...getCardStyle(event),
+                      top: `${top}%`,
+                      height: `${height}%`,
+                    };
+
+                    return renderEventCard(event, eventStyle);
+                  })}
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
+      {/* Mobile day view */}
       <section className="mobile-day-toggle" aria-label="Mobile day view">
         <div className="mobile-day-chips">
           {dayShort.map((day, index) => (
