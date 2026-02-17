@@ -3,21 +3,119 @@
 import { useState, useRef, useCallback } from 'react';
 
 // ============================================
-// STAGE DATA
+// PROJECT DATA
 // ============================================
-interface Stage {
+interface Project {
+  id: string;
   name: string;
-  images: string[];
+  folder: string;       // path under /studio/
+  heroImage: string;     // filename for selector button
+  stages: { name: string; image: string }[];
 }
 
-const stages: Stage[] = [
-  { name: 'Design', images: ['/studio/design-1.jpg'] },
-  { name: 'Throw', images: ['/studio/throw-1.jpg'] },
-  { name: 'Trim', images: ['/studio/trim-1.jpg'] },
-  { name: 'Embellish', images: ['/studio/embellish-1.jpg'] },
-  { name: 'Bisque', images: ['/studio/bisque-1.jpg'] },
-  { name: 'Glaze', images: ['/studio/glaze-1.jpg'] },
+const projects: Project[] = [
+  {
+    id: 'tenmoku-mugs-2025',
+    name: '',
+    folder: '/studio/tenmoku-mugs-2025',
+    heroImage: 'mug25.png',
+    stages: [
+      { name: 'Design', image: 'design.png' },
+      { name: 'Throw', image: 'throw.png' },
+      { name: 'Trim', image: 'trim.png' },
+      { name: 'Embellish', image: 'embellish.png' },
+      { name: 'Bisque', image: 'bisque.png' },
+      { name: 'Glaze', image: 'glaze.png' },
+    ],
+  },
 ];
+
+// ============================================
+// PROJECT SELECTOR
+// ============================================
+function ProjectSelector({
+  projects,
+  activeProject,
+  onSelect,
+}: {
+  projects: Project[];
+  activeProject: Project;
+  onSelect: (project: Project) => void;
+}) {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '12px',
+        flexWrap: 'wrap',
+      }}
+    >
+      {projects.map((project) => {
+        const isActive = project.id === activeProject.id;
+        return (
+          <button
+            key={project.id}
+            className="clickable"
+            onClick={() => onSelect(project)}
+            style={{
+              width: '90px',
+              height: '90px',
+              borderRadius: '50%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '2px',
+              border: isActive
+                ? '2px solid var(--olive)'
+                : '2px solid rgba(165, 157, 50, 0.25)',
+              backgroundColor: isActive
+                ? 'rgba(165, 157, 50, 0.12)'
+                : 'rgba(165, 157, 50, 0.05)',
+              transition: 'all 0.2s ease',
+              padding: 0,
+            }}
+
+          >
+            <div
+              style={{
+                width: '72px',
+                height: '72px',
+                borderRadius: '50%',
+                overflow: 'hidden',
+                backgroundColor: 'rgba(165, 157, 50, 0.08)',
+                border: '2px solid rgba(165, 157, 50, 0.2)',
+                flexShrink: 0,
+              }}
+            >
+              <img
+                src={`${project.folder}/${project.heroImage}`}
+                alt={project.name}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+            </div>
+            <span
+              style={{
+                fontSize: '0.78rem',
+                fontWeight: isActive ? 600 : 400,
+                color: isActive ? 'var(--olive)' : 'var(--brown)',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {project.name}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 
 // ============================================
 // PILL PROGRESS BAR
@@ -26,15 +124,16 @@ function ProgressBar({
   activeIndex,
   onChangeIndex,
   total,
+  stageNames,
 }: {
   activeIndex: number;
   onChangeIndex: (index: number) => void;
   total: number;
+  stageNames: string[];
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
 
-  // Shared positioning: dots sit at 4.25% to 95.75% of the track
   const dotLeft = (i: number) =>
     total > 1 ? 4.25 + (i / (total - 1)) * 91.5 : 50;
 
@@ -89,7 +188,7 @@ function ProgressBar({
           userSelect: 'none',
         }}
       >
-      {/* Filled capsule ending at active dot */}
+        {/* Filled capsule */}
         {activeIndex > 0 && (
           <div
             style={{
@@ -97,7 +196,7 @@ function ProgressBar({
               left: 0,
               top: 0,
               bottom: 0,
-              width: activeIndex === total - 1 ? '100%' : `calc(${dotLeft(activeIndex)}% + 20px)`,
+              width: activeIndex === total - 1 ? '100%' : `calc(${dotLeft(activeIndex)}% + 18px)`,
               backgroundColor: 'rgba(165, 157, 50, 0.35)',
               borderRadius: '20px',
               transition: isDragging.current ? 'none' : 'width 0.3s ease',
@@ -106,7 +205,7 @@ function ProgressBar({
         )}
 
         {/* Dots */}
-        {stages.map((_, i) => {
+        {stageNames.map((_, i) => {
           const isActive = i === activeIndex;
           const isPast = i < activeIndex;
           return (
@@ -138,11 +237,11 @@ function ProgressBar({
 
       {/* Labels */}
       <div style={{ position: 'relative', height: '28px', marginTop: '10px' }}>
-        {stages.map((stage, i) => {
+        {stageNames.map((name, i) => {
           const isActive = i === activeIndex;
           return (
             <button
-              key={stage.name}
+              key={name}
               className="clickable"
               onClick={() => onChangeIndex(i)}
               style={{
@@ -160,7 +259,7 @@ function ProgressBar({
                 whiteSpace: 'nowrap',
               }}
             >
-              {stage.name}
+              {name}
             </button>
           );
         })}
@@ -170,59 +269,56 @@ function ProgressBar({
 }
 
 // ============================================
-// STAGE DISPLAY
+// STICKER IMAGE DISPLAY
 // ============================================
-function StageDisplay({ stage }: { stage: Stage }) {
+function StageDisplay({ src, stageName }: { src: string; stageName: string }) {
   const [imgError, setImgError] = useState(false);
 
   return (
     <div
       style={{
         display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
+        justifyContent: 'center',
         minHeight: '420px',
+        padding: '1rem 0',
       }}
     >
-      <div
-        style={{
-          width: '100%',
-          maxWidth: '520px',
-          aspectRatio: '4 / 3',
-          borderRadius: '10px',
-          overflow: 'hidden',
-          border: '1px solid rgba(165, 157, 50, 0.2)',
-          backgroundColor: 'rgba(165, 157, 50, 0.06)',
-        }}
-      >
-        {!imgError ? (
-          <img
-            src={stage.images[0]}
-            alt={`${stage.name} stage`}
-            onError={() => setImgError(true)}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-            }}
-          />
-        ) : (
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--olive)',
-              opacity: 0.3,
-              fontSize: '0.85rem',
-            }}
-          >
-            Photo coming soon
-          </div>
-        )}
-      </div>
+      {!imgError ? (
+        <img
+          src={src}
+          alt={`${stageName} stage`}
+          onError={() => setImgError(true)}
+          style={{
+            maxWidth: '100%',
+            maxHeight: '500px',
+            objectFit: 'contain',
+            filter: [
+              'drop-shadow(0 0 4px white)',
+              'drop-shadow(0 0 4px white)',
+              'drop-shadow(0 0 4px white)',
+              'drop-shadow(0 0 4px white)',
+              'drop-shadow(0 0 0.5px var(--olive))',
+              'drop-shadow(0 0 0.5px var(--olive))',
+              'drop-shadow(0 0 10px rgba(165, 157, 50, 0.2))',
+            ].join(' '),
+          }}
+        />
+      ) : (
+        <div
+          style={{
+            width: '360px',
+            height: '270px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--olive)',
+            opacity: 0.3,
+            fontSize: '0.85rem',
+          }}
+        >
+          Photo coming soon
+        </div>
+      )}
     </div>
   );
 }
@@ -231,17 +327,35 @@ function StageDisplay({ stage }: { stage: Stage }) {
 // MAIN PAGE
 // ============================================
 export default function StudioPage() {
+  const [activeProject, setActiveProject] = useState(projects[0]);
   const [activeStage, setActiveStage] = useState(0);
+
+  const handleProjectChange = (project: Project) => {
+    setActiveProject(project);
+    setActiveStage(0);
+  };
+
+  const currentStage = activeProject.stages[activeStage];
+  const imageSrc = `${activeProject.folder}/${currentStage.image}`;
 
   return (
     <main
       className="min-h-screen"
       style={{ backgroundColor: 'var(--offwhite)' }}
     >
-      <section style={{ padding: '4rem 1.5rem 2rem', textAlign: 'center' }}>
-      <h1 className="text-5xl font-bold text-gray-900 mb-8">At the studio</h1>
+      {/* Header */}
+      <section className="py-16 px-6 text-center">
+        <h1 className="text-5xl font-bold text-gray-900 mb-8">At the studio</h1>
+
+        {/* Project selector */}
+        <ProjectSelector
+          projects={projects}
+          activeProject={activeProject}
+          onSelect={handleProjectChange}
+        />
       </section>
 
+      {/* Progress bar + image */}
       <section
         style={{
           maxWidth: '760px',
@@ -252,12 +366,14 @@ export default function StudioPage() {
         <ProgressBar
           activeIndex={activeStage}
           onChangeIndex={setActiveStage}
-          total={stages.length}
+          total={activeProject.stages.length}
+          stageNames={activeProject.stages.map((s) => s.name)}
         />
 
-        <StageDisplay stage={stages[activeStage]} />
+        <StageDisplay src={imageSrc} stageName={currentStage.name} />
       </section>
 
+      {/* Footer */}
       <footer
         className="text-center py-8 text-sm"
         style={{ color: 'var(--brown)' }}

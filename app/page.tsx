@@ -6,7 +6,7 @@ import { useMemo, useState, type CSSProperties } from "react";
 // ============================================
 // EXISTING PAGES - only these get clickable links
 // ============================================
-const existingPages = new Set(["/galleries", "/reading", "/work"]);
+const existingPages = new Set(["/galleries", "/reading", "/work", "/studio"]);
 
 type EventColor = "blue" | "red" | "olive" | "gold";
 
