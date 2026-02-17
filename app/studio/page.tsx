@@ -28,6 +28,20 @@ const projects: Project[] = [
       { name: 'Glaze', image: 'glaze.png' },
     ],
   },
+    {
+    id: 'vase-2023',
+    name: '',
+    folder: '/studio/vase-2023',
+    heroImage: 'vase23.png',
+    stages: [
+      { name: 'Design', image: 'design.png' },
+      { name: 'Throw', image: 'throw.png' },
+      { name: 'Trim', image: 'trim.png' },
+      { name: 'Embellish', image: 'embellish.png' },
+      { name: 'Bisque', image: 'bisque.png' },
+      { name: 'Glaze', image: 'glaze.png' },
+    ],
+  }
 ];
 
 // ============================================
