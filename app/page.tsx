@@ -80,7 +80,7 @@ const calendarEvents: CalendarEvent[] = [
     color: "gold",
     primary: true,
     statusDay: "Sunday morning",
-    statusActivity: "reading",
+    statusActivity: "sitting down with the newspaper",
   },
   {
     id: "sun-gallery",
