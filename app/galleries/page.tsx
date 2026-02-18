@@ -101,10 +101,16 @@ export default function Gallery() {
         <div
           className="mobile-tooltip-overlay"
           onClick={dismissTooltip}
+          onTouchEnd={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            dismissTooltip();
+          }}
         >
-          <div
+        <div
             className="mobile-tooltip-sheet"
             onClick={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
           >
             <button
               className="clickable"
