@@ -116,7 +116,8 @@ export default function Gallery() {
                 margin: 0,
                 whiteSpace: 'pre-line',
                 color: 'var(--olive)',
-                fontSize: '0.95rem',
+                fontSize: '0.82rem',
+                fontWeight: 400,
                 lineHeight: 1.65,
                 paddingRight: '24px',
               }}
@@ -154,6 +155,9 @@ export default function Gallery() {
           .gallery-grid {
             grid-template-columns: repeat(2, 1fr);
           }
+          h1 {
+            font-size: 2rem !important;
+          }
           .desktop-tooltip {
             display: none !important;
           }
@@ -170,12 +174,30 @@ export default function Gallery() {
             position: relative;
             width: 100%;
             background: var(--offwhite);
-            border-top: 2px solid var(--olive);
-            padding: 20px 20px 28px;
+            padding: 24px 20px 32px;
             max-height: 45vh;
             overflow-y: auto;
             animation: sheetSlideUp 0.25s ease;
             box-shadow: 0 -8px 30px rgba(85, 49, 26, 0.12);
+            border-top: 1px solid rgba(165, 157, 50, 0.45);
+            border-bottom: 1px solid rgba(165, 157, 50, 0.45);
+          }
+          .mobile-tooltip-sheet::before,
+          .mobile-tooltip-sheet::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 0;
+            border-top: 1px solid rgba(165, 157, 50, 0.25);
+          }
+          .mobile-tooltip-sheet::before {
+            top: 5px;
+          }
+          .mobile-tooltip-sheet::after {
+            bottom: 5px;
+            border-top: none;
+            border-bottom: 1px solid rgba(165, 157, 50, 0.25);
           }
         }
 
@@ -188,15 +210,6 @@ export default function Gallery() {
           to { transform: translateY(0); }
         }
 
-        .mobile-border {
-          display: none;
-        }
-
-        @media (max-width: 640px) {
-          .mobile-border {
-            display: block;
-          }
-        }
       `}</style>
     </main>
   );
@@ -247,51 +260,7 @@ function GalleryTile({
       onMouseMove={handleMouseMove}
       onClick={handleClick}
     >
-{/* Double border inset - mobile only */}
-      <div
-        className="absolute mobile-border"
-        style={{
-          left: 0,
-          right: 0,
-          top: '6px',
-          height: '0px',
-          borderTop: '1px solid rgba(255, 255, 255, 0.25)',
-          pointerEvents: 'none',
-        }}
-      />
-      <div
-        className="absolute mobile-border"
-        style={{
-          left: 0,
-          right: 0,
-          bottom: '6px',
-          height: '0px',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.25)',
-          pointerEvents: 'none',
-        }}
-      />
-      <div
-        className="absolute mobile-border"
-        style={{
-          left: 0,
-          right: 0,
-          top: '10px',
-          height: '0px',
-          borderTop: '1px solid rgba(255, 255, 255, 0.15)',
-          pointerEvents: 'none',
-        }}
-      />
-      <div
-        className="absolute mobile-border"
-        style={{
-          left: 0,
-          right: 0,
-          bottom: '10px',
-          height: '0px',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.15)',
-          pointerEvents: 'none',
-        }}
-      />
+
 
       {/* Image container */}
       <div
