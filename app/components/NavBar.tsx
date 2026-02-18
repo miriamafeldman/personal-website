@@ -5,16 +5,15 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 const navItems = [
-  { label: 'Working', href: '/work', color: 'var(--blue)' },
-  { label: 'Making', href: '/studio', color: 'var(--olive)' },
-  { label: 'Reading', href: '/reading', color: 'var(--gold)' },
-  { label: 'Visiting', href: '/galleries', color: 'var(--olive)' },
+  { label: 'Working', href: '/work', color: 'var(--blue)', width: '5em' },
+  { label: 'Making', href: '/studio', color: 'var(--red)', width: '4.8em' },
+  { label: 'Reading', href: '/reading', color: 'var(--gold)', width: '5.2em' },
+  { label: 'Visiting', href: '/galleries', color: 'var(--olive)', width: '5em' },
 ];
 
 export default function NavBar() {
   const pathname = usePathname();
 
-  // Hide on homepage
   if (pathname === '/') return null;
 
   return (
@@ -22,9 +21,9 @@ export default function NavBar() {
       style={{
         display: 'flex',
         alignItems: 'baseline',
-        padding: '0.55rem 1rem',
+        justifyContent: 'space-between',
+        padding: '0.7rem clamp(1rem, 3vw, 2rem)',
         zIndex: 50,
-        borderBottom: '1px solid rgba(85, 49, 26, 0.06)',
       }}
     >
       <Link
@@ -34,7 +33,6 @@ export default function NavBar() {
           textDecoration: 'none',
           fontWeight: 700,
           fontSize: '0.95rem',
-          marginRight: 'auto',
         }}
       >
         MAF
@@ -42,7 +40,7 @@ export default function NavBar() {
       <div
         style={{
           display: 'flex',
-          gap: 'clamp(1.2rem, 3vw, 2.5rem)',
+          gap: 'clamp(0.8rem, 2vw, 1.5rem)',
         }}
       >
         {navItems.map((item) => (
@@ -51,6 +49,7 @@ export default function NavBar() {
             label={item.label}
             href={item.href}
             color={item.color}
+            width={item.width}
             isActive={pathname === item.href || pathname.startsWith(item.href + '/')}
           />
         ))}
@@ -63,11 +62,13 @@ function NavLink({
   label,
   href,
   color,
+  width,
   isActive,
 }: {
   label: string;
   href: string;
   color: string;
+  width: string;
   isActive: boolean;
 }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -84,26 +85,31 @@ function NavLink({
       style={{
         textDecoration: 'none',
         color: showEffect ? color : 'var(--black)',
-        fontSize: '0.85rem',
+        fontSize: 'clamp(0.7rem, 1.8vw, 0.85rem)',
         fontWeight: 400,
         letterSpacing: '0.01em',
-        transition: 'color 0.2s ease, font-weight 0.2s ease',
-        display: 'flex',
-        alignItems: 'baseline',
+        transition: 'color 0.2s ease',
+        display: 'inline-block',
+        width: width,
+        textAlign: 'right',
       }}
     >
-      <span
-        style={{
-          fontFamily: showEffect ? 'var(--font-gothic), cursive' : 'inherit',
-          fontSize: showEffect ? '1.3em' : '1em',
-          fontWeight: showEffect ? 400 : 300,
-          lineHeight: 1,
-          transition: 'font-size 0.2s ease',
-        }}
-      >
-        {firstLetter}
-      </span>
-      <span>{rest}</span>
+      {showEffect ? (
+        <>
+          <span
+            style={{
+              fontFamily: 'var(--font-gothic), cursive',
+              fontSize: '1.3em',
+              lineHeight: 1,
+            }}
+          >
+            {firstLetter}
+          </span>
+          <span>{rest}</span>
+        </>
+      ) : (
+        label
+      )}
     </Link>
   );
 }
