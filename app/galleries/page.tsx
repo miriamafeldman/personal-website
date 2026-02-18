@@ -41,12 +41,14 @@ function useColumnCount(gridRef: React.RefObject<HTMLDivElement | null>) {
 export default function Gallery() {
   const [mobileTooltip, setMobileTooltip] = useState<string | null>(null);
   const [activeTileIndex, setActiveTileIndex] = useState<number | null>(null);
+  const lastDismissTime = useRef(0);  // ← add this line
   const gridRef = useRef<HTMLDivElement>(null);
   const columns = useColumnCount(gridRef);
 
   const dismissTooltip = () => {
     setMobileTooltip(null);
     setActiveTileIndex(null);
+    lastDismissTime.current = Date.now();
   };
 
   return (
@@ -84,6 +86,7 @@ export default function Gallery() {
                 index={index}
                 isActive={activeTileIndex === index}
                 onMobileTap={(title, idx) => {
+                  if (Date.now() - lastDismissTime.current < 300) return;
                   setMobileTooltip(title);
                   setActiveTileIndex(idx);
                 }}
