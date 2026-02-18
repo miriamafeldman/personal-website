@@ -561,12 +561,38 @@ export default function Home() {
 
         <div className="mobile-event-stack">
           {eventsByDay[mobileDay].map((event) => {
+            const hasLink = event.href && existingPages.has(event.href);
             const style: CSSProperties = {
               ...getCardStyle(event),
+              position: 'relative',
               minHeight: `${Math.max(42, (event.end - event.start) * 24)}px`,
             };
 
-            return renderEventCard(event, style);
+            const content = (
+              <>
+                <span className="calendar-card-title">{event.title}</span>
+                <span className="calendar-card-time">{event.time}</span>
+              </>
+            );
+
+            if (!hasLink) {
+              return (
+                <div key={event.id} className="calendar-card" style={style}>
+                  {content}
+                </div>
+              );
+            }
+
+            return (
+              <Link
+                key={event.id}
+                href={event.href!}
+                className="calendar-card"
+                style={style}
+              >
+                {content}
+              </Link>
+            );
           })}
         </div>
       </section>
