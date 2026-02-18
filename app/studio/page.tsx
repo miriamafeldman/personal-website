@@ -375,7 +375,7 @@ export default function StudioPage() {
         style={{
           maxWidth: '760px',
           margin: '0 auto',
-          padding: '1rem 1.5rem 4rem',
+          padding: '0 1.5rem 4rem',
         }}
       >
         <ProgressBar
