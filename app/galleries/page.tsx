@@ -112,9 +112,14 @@ export default function Gallery() {
             onClick={(e) => e.stopPropagation()}
             onTouchEnd={(e) => e.stopPropagation()}
           >
-            <button
+          <button
               className="clickable"
               onClick={dismissTooltip}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                dismissTooltip();
+              }}
               style={{
                 position: 'absolute',
                 top: '12px',
