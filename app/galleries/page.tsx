@@ -40,14 +40,20 @@ function useColumnCount(gridRef: React.RefObject<HTMLDivElement | null>) {
 
 export default function Gallery() {
   const [mobileTooltip, setMobileTooltip] = useState<string | null>(null);
+  const [activeTileIndex, setActiveTileIndex] = useState<number | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const columns = useColumnCount(gridRef);
+
+  const dismissTooltip = () => {
+    setMobileTooltip(null);
+    setActiveTileIndex(null);
+  };
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: 'var(--offwhite)' }}>
       {/* Header */}
       <section className="py-16 px-6 text-center">
-        <h1 className="text-5xl font-bold text-gray-900 mb-4">
+        <h1 className="text-5xl font-bold text-gray-900 mb-4 gallery-title">
           At the gallery
         </h1>
       </section>
@@ -75,7 +81,12 @@ export default function Gallery() {
                 alt={item.alt}
                 title={item.title}
                 isBrown={isBrown}
-                onMobileTap={(title) => setMobileTooltip(title)}
+                index={index}
+                isActive={activeTileIndex === index}
+                onMobileTap={(title, idx) => {
+                  setMobileTooltip(title);
+                  setActiveTileIndex(idx);
+                }}
               />
             );
           })}
@@ -86,7 +97,7 @@ export default function Gallery() {
       {mobileTooltip && (
         <div
           className="mobile-tooltip-overlay"
-          onClick={() => setMobileTooltip(null)}
+          onClick={dismissTooltip}
         >
           <div
             className="mobile-tooltip-sheet"
@@ -94,7 +105,7 @@ export default function Gallery() {
           >
             <button
               className="clickable"
-              onClick={() => setMobileTooltip(null)}
+              onClick={dismissTooltip}
               style={{
                 position: 'absolute',
                 top: '12px',
@@ -152,11 +163,11 @@ export default function Gallery() {
         }
 
         @media (max-width: 640px) {
+          .gallery-title {
+            font-size: 2rem !important;
+          }
           .gallery-grid {
             grid-template-columns: repeat(2, 1fr);
-          }
-          h1 {
-            font-size: 2rem !important;
           }
           .desktop-tooltip {
             display: none !important;
@@ -189,14 +200,13 @@ export default function Gallery() {
             left: 0;
             right: 0;
             height: 0;
-            border-top: 1px solid rgba(165, 157, 50, 0.25);
           }
           .mobile-tooltip-sheet::before {
             top: 5px;
+            border-top: 1px solid rgba(165, 157, 50, 0.25);
           }
           .mobile-tooltip-sheet::after {
             bottom: 5px;
-            border-top: none;
             border-bottom: 1px solid rgba(165, 157, 50, 0.25);
           }
         }
@@ -209,7 +219,6 @@ export default function Gallery() {
           from { transform: translateY(100%); }
           to { transform: translateY(0); }
         }
-
       `}</style>
     </main>
   );
@@ -220,13 +229,17 @@ function GalleryTile({
   alt,
   title,
   isBrown,
+  index,
+  isActive,
   onMobileTap,
 }: {
   src: string;
   alt: string;
   title: string;
   isBrown: boolean;
-  onMobileTap: (title: string) => void;
+  index: number;
+  isActive: boolean;
+  onMobileTap: (title: string, index: number) => void;
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -236,19 +249,13 @@ function GalleryTile({
     setMousePos({ x: e.clientX, y: e.clientY });
   };
 
-  const handleClick = () => {
-    if (title) {
-      onMobileTap(title);
-    }
-  };
-
   return (
     <div
       ref={tileRef}
       className="relative overflow-visible clickable gallery-tile"
       style={{
         aspectRatio: '3 / 4',
-        backgroundColor: isHovered
+        backgroundColor: isHovered || isActive
           ? 'var(--olive)'
           : isBrown
           ? 'var(--brown)'
@@ -258,10 +265,14 @@ function GalleryTile({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onMouseMove={handleMouseMove}
-      onClick={handleClick}
+      onTouchEnd={(e) => {
+        e.preventDefault();
+        if (title) onMobileTap(title, index);
+      }}
+      onClick={() => {
+        if (title) onMobileTap(title, index);
+      }}
     >
-
-
       {/* Image container */}
       <div
         className="absolute inset-0 flex items-center justify-center"
@@ -273,7 +284,7 @@ function GalleryTile({
             alt={alt}
             className="w-full h-full object-contain"
             style={{
-              transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+              transform: isHovered || isActive ? 'scale(1.05)' : 'scale(1)',
               transition: 'transform 0.5s ease',
             }}
           />
