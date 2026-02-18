@@ -261,10 +261,25 @@ button:hover,
   }
 }
 
-/* ------------------ Mobile header font size  ------------------ */
+/* ------------------ Mobile header font size & calendar chips  ------------------ */
 
 @media (max-width: 640px) {
   h1 {
     font-size: 2rem !important;
+  }
+
+  .mobile-day-chips {
+    justify-content: space-between;
+    gap: 0;
+    overflow-x: visible;
+  }
+
+  .mobile-day-chip {
+    padding: 0.25rem 0;
+    min-width: 0;
+    flex: 1;
+    text-align: center;
+    font-size: 0.68rem;
+    margin: 0 2px;
   }
 }
