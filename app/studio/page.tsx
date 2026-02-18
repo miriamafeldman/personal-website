@@ -38,7 +38,7 @@ const projects: Project[] = [
       { name: 'Throw', image: 'throw.png' },
       { name: 'Trim', image: 'trim.png' },
       { name: 'Embellish', image: 'embellish.png' },
-      { name: 'Bisque', image: 'bisque.png' },
+      { name: 'Bisque', image: '' },
       { name: 'Glaze', image: 'glaze.png' },
     ],
   }
@@ -349,7 +349,8 @@ export default function StudioPage() {
     setActiveStage(0);
   };
 
-  const currentStage = activeProject.stages[activeStage];
+  const activeStages = activeProject.stages.filter((s) => s.image !== '');
+  const currentStage = activeStages[activeStage];
   const imageSrc = `${activeProject.folder}/${currentStage.image}`;
 
   return (
@@ -380,8 +381,8 @@ export default function StudioPage() {
         <ProgressBar
           activeIndex={activeStage}
           onChangeIndex={setActiveStage}
-          total={activeProject.stages.length}
-          stageNames={activeProject.stages.map((s) => s.name)}
+          total={activeStages.length}
+          stageNames={activeStages.map((s) => s.name)}
         />
 
         <StageDisplay src={imageSrc} stageName={currentStage.name} />
