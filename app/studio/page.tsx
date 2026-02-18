@@ -249,14 +249,14 @@ function ProgressBar({
         })}
       </div>
 
-      {/* Labels */}
-      <div style={{ position: 'relative', height: '28px', marginTop: '10px' }}>
+    {/* Labels */}
+      <div className="progress-labels" style={{ position: 'relative', height: '28px', marginTop: '10px' }}>
         {stageNames.map((name, i) => {
           const isActive = i === activeIndex;
           return (
             <button
               key={name}
-              className="clickable"
+              className="clickable progress-label"
               onClick={() => onChangeIndex(i)}
               style={{
                 position: 'absolute',
@@ -301,6 +301,7 @@ function StageDisplay({ src, stageName }: { src: string; stageName: string }) {
         <img
           src={src}
           alt={`${stageName} stage`}
+          className="sticker-image"
           onError={() => setImgError(true)}
           style={{
             maxWidth: '100%',
@@ -395,6 +396,27 @@ export default function StudioPage() {
       >
         © 2026 Miriam Ames Feldman
       </footer>
+
+      <style>{`
+              @media (max-width: 640px) {
+                  .progress-labels {
+                    display: flex !important;
+                    justify-content: space-between;
+                    height: auto !important;
+                  }
+                  .progress-labels .progress-label {
+                    position: static !important;
+                    transform: none !important;
+                    left: auto !important;
+                    font-size: 0.68rem !important;
+                  }
+                  .sticker-image {
+                    filter: none !important;
+                  }
+                }
+              }
+            `}</style>
+
     </main>
   );
 }
