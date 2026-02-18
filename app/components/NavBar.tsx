@@ -17,44 +17,63 @@ export default function NavBar() {
   if (pathname === '/') return null;
 
   return (
-    <nav
-      style={{
-        display: 'flex',
-        alignItems: 'baseline',
-        justifyContent: 'space-between',
-        padding: '0.7rem clamp(1rem, 3vw, 2rem)',
-        zIndex: 50,
-      }}
-    >
-      <Link
-        href="/"
-        className="home-link clickable"
-        style={{
-          textDecoration: 'none',
-          fontWeight: 700,
-          fontSize: '0.95rem',
-        }}
-      >
-        MAF
-      </Link>
-      <div
+    <>
+      <nav
+        className="site-nav"
         style={{
           display: 'flex',
-          gap: 'clamp(0.8rem, 2vw, 1.5rem)',
+          alignItems: 'baseline',
+          justifyContent: 'space-between',
+          padding: '0.7rem clamp(1rem, 3vw, 2rem)',
+          zIndex: 50,
         }}
       >
-        {navItems.map((item) => (
-          <NavLink
-            key={item.href}
-            label={item.label}
-            href={item.href}
-            color={item.color}
-            width={item.width}
-            isActive={pathname === item.href || pathname.startsWith(item.href + '/')}
-          />
-        ))}
-      </div>
-    </nav>
+        <Link
+          href="/"
+          className="home-link clickable"
+          style={{
+            textDecoration: 'none',
+            fontWeight: 700,
+            fontSize: '0.95rem',
+          }}
+        >
+          MAF
+        </Link>
+        <div
+          className="nav-links"
+          style={{
+            display: 'flex',
+            gap: 'clamp(0.8rem, 2vw, 1.5rem)',
+          }}
+        >
+          {navItems.map((item) => (
+            <NavLink
+              key={item.href}
+              label={item.label}
+              href={item.href}
+              color={item.color}
+              width={item.width}
+              isActive={pathname === item.href || pathname.startsWith(item.href + '/')}
+            />
+          ))}
+        </div>
+      </nav>
+      <style>{`
+          @media (max-width: 640px) {
+            .site-nav {
+              flex-wrap: wrap;
+              gap: 0.2rem;
+            }
+            .nav-links {
+              width: 100%;
+              justify-content: flex-start;
+            }
+            .nav-links a {
+              text-align: left !important;
+            }
+          }
+      `}</style>
+    </>
   );
 }
 
