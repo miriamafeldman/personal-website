@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 const navItems = [
   { label: 'Working', href: '/work', color: 'var(--blue)', width: '5em' },
-  { label: 'Making', href: '/studio', color: 'var(--red)', width: '4.8em' },
+  { label: 'Making', href: '/studio', color: 'var(--olive)', width: '4.8em' },
   { label: 'Reading', href: '/reading', color: 'var(--gold)', width: '5.2em' },
   { label: 'Visiting', href: '/galleries', color: 'var(--olive)', width: '5em' },
 ];
