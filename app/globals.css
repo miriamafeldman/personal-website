@@ -43,12 +43,10 @@ button:hover,
   cursor: url("/cursors/astro_link.png") 6 0, pointer !important;
 }
 
-/* ------------------ All elements with .clickable class ------------------ */
 .clickable {
   cursor: url("/cursors/astro_link.png") 6 0, pointer !important;
 }
 
-/* ------------------ Optional: hover state for clickable class for safety ------------------ */
 .clickable:hover {
   cursor: url("/cursors/astro_link.png") 6 0, pointer !important;
 }
@@ -69,7 +67,6 @@ button:hover,
 }
 
 /* ------------------ Calendar homepage  ------------------ */
-
 
 .home-shell {
   width: min(1120px, calc(100vw - 2rem));
@@ -105,7 +102,7 @@ button:hover,
   position: relative;
   width: 48px;
   flex-shrink: 0;
-  margin-top: 28px; /* align with day-events top */
+  margin-top: 28px;
   height: 500px;
 }
 
@@ -129,7 +126,6 @@ button:hover,
   min-width: 0;
 }
 
-/* Horizontal lines spanning the whole grid */
 .calendar-grid-lines {
   position: absolute;
   top: 28px;
@@ -218,7 +214,7 @@ button:hover,
   opacity: 0.72;
 }
 
-/* Mobile */
+/* Mobile calendar */
 .mobile-day-toggle {
   display: none;
   margin-top: 1rem;
@@ -251,6 +247,13 @@ button:hover,
   gap: 0.48rem;
 }
 
+/* Reading page - mobile rating toggle (hidden on desktop) */
+.mobile-rating-toggle {
+  display: none;
+}
+
+/* ------------------ Tablet breakpoint ------------------ */
+
 @media (max-width: 860px) {
   .calendar-grid-wrap {
     display: none;
@@ -269,13 +272,15 @@ button:hover,
   }
 }
 
-/* ------------------ Mobile header font size & calendar chips  ------------------ */
+/* ------------------ Mobile breakpoint ------------------ */
 
 @media (max-width: 640px) {
+  /* Global */
   h1 {
     font-size: 2rem !important;
   }
 
+  /* Calendar chips */
   .mobile-day-chips {
     justify-content: space-between;
     gap: 0;
@@ -289,5 +294,67 @@ button:hover,
     text-align: center;
     font-size: 0.68rem;
     margin: 0 2px;
+  }
+
+  /* Reading page - show mobile rating toggle */
+  .mobile-rating-toggle {
+    display: block;
+  }
+
+  /* Reading page - hide Published & Read columns */
+  .desktop-only-col,
+  .desktop-only-inline {
+    display: none !important;
+  }
+
+  /* Reading page - toggle rating columns via parent class */
+  .mobile-my-rating-col,
+  .mobile-goodreads-col {
+    display: none !important;
+  }
+
+  .mobile-rating-mine .mobile-my-rating-col {
+    display: table-cell !important;
+  }
+
+  .mobile-rating-goodreads .mobile-goodreads-col {
+    display: table-cell !important;
+  }
+
+  /* Reading page - table sizing */
+  table {
+    font-size: 0.7rem !important;
+  }
+
+  table th,
+  table td {
+    padding: 0.3rem 0.3rem !important;
+  }
+
+  table svg {
+    width: 11px !important;
+    height: 11px !important;
+  }
+
+  /* Reading page - filter pills */
+  .flex.items-center.gap-3 button {
+    font-size: 0.55rem !important;
+    padding: 3px 6px !important;
+  }
+
+  .flex.items-center.gap-3 span {
+    font-size: 0.55rem !important;
+  }
+
+  /* Reading page - toggle labels */
+  .flex.items-center.justify-center.gap-4 span {
+    font-size: 0.85rem !important;
+  }
+
+  /* Reading page - quote rows */
+  table td[colspan] p {
+    font-size: 0.7rem !important;
+    max-width: 100% !important;
+    padding: 0 0.5rem !important;
   }
 }

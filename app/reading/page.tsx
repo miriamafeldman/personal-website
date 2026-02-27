@@ -638,6 +638,7 @@ function BooksTable({ books }: { books: Book[] }) {
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
   const [yearReadFilter, setYearReadFilter] = useState<string | null>(null);
   const [expandedQuote, setExpandedQuote] = useState<number | null>(null);
+  const [mobileRatingSource, setMobileRatingSource] = useState<'mine' | 'goodreads'>('mine');
 
   const handleRatingToggle = (rating: 'first' | 'eoy') => {
     setActiveRating(rating);
@@ -663,7 +664,7 @@ function BooksTable({ books }: { books: Book[] }) {
   const numCols = 6;
 
   return (
-    <div>
+    <div className={`mobile-rating-${mobileRatingSource}`}>
       <BookFilters
         books={books}
         authorFilter={authorFilter}
@@ -676,20 +677,80 @@ function BooksTable({ books }: { books: Book[] }) {
         setYearReadFilter={setYearReadFilter}
       />
 
+      {/* Mobile: rating source toggle (My Rating vs Goodreads) */}
+      <div className="mobile-rating-toggle">
+        <div className="flex items-center justify-center gap-3" style={{ fontSize: '0.7rem', marginBottom: '12px' }}>
+          <span
+            className="clickable"
+            style={{
+              fontWeight: mobileRatingSource === 'mine' ? 'bold' : 'normal',
+              opacity: mobileRatingSource === 'mine' ? 1 : 0.5,
+              transition: 'all 0.3s ease',
+            }}
+            onClick={() => setMobileRatingSource('mine')}
+          >
+            My Rating
+          </span>
+          <div
+            className="clickable"
+            onClick={() => setMobileRatingSource(mobileRatingSource === 'mine' ? 'goodreads' : 'mine')}
+            style={{
+              width: '36px',
+              height: '18px',
+              borderRadius: '9px',
+              backgroundColor: mobileRatingSource === 'goodreads' ? 'var(--brown)' : 'var(--gold)',
+              position: 'relative',
+              transition: 'background-color 0.3s ease',
+            }}
+          >
+            <div style={{
+              width: '14px',
+              height: '14px',
+              borderRadius: '50%',
+              backgroundColor: 'var(--offwhite)',
+              position: 'absolute',
+              top: '2px',
+              left: mobileRatingSource === 'goodreads' ? '20px' : '2px',
+              transition: 'left 0.3s ease',
+            }} />
+          </div>
+          <span
+            className="clickable"
+            style={{
+              fontWeight: mobileRatingSource === 'goodreads' ? 'bold' : 'normal',
+              opacity: mobileRatingSource === 'goodreads' ? 1 : 0.5,
+              transition: 'all 0.3s ease',
+            }}
+            onClick={() => setMobileRatingSource('goodreads')}
+          >
+            Goodreads
+          </span>
+        </div>
+
+        {/* Sub-toggle: First Read vs EOY (only when My Rating selected) */}
+        {mobileRatingSource === 'mine' && (
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
+            <RatingToggle activeRating={activeRating} onToggle={handleRatingToggle} />
+          </div>
+        )}
+      </div>
+
       <table className="w-full" style={{ borderCollapse: 'collapse' }}>
         <thead>
           <tr style={{ color: 'var(--black)' }}>
             <th className="text-left pb-4 pr-8 font-normal" style={{ width: '28%' }}>Title</th>
             <th className="text-left pb-4 pr-8 font-normal italic" style={{ width: '16%' }}>Author</th>
-            <th className="text-left pb-4 pr-8 font-normal" style={{ width: '7%' }}>Published</th>
-            <th className="text-left pb-4 pr-8 font-normal" style={{ width: '11%' }}>Read</th>
-            <th className="text-left pb-4 pr-4 font-normal" style={{ width: '22%' }}>
+            <th className="text-left pb-4 pr-8 font-normal desktop-only-col" style={{ width: '7%' }}>Published</th>
+            <th className="text-left pb-4 pr-8 font-normal desktop-only-col" style={{ width: '11%' }}>Read</th>
+            <th className="text-left pb-4 pr-4 font-normal mobile-my-rating-col" style={{ width: '22%' }}>
               <div>
                 <span>My Rating</span>
-                <RatingToggle activeRating={activeRating} onToggle={handleRatingToggle} />
+                <span className="desktop-only-inline">
+                  <RatingToggle activeRating={activeRating} onToggle={handleRatingToggle} />
+                </span>
               </div>
             </th>
-            <th className="text-left pb-4 font-normal" style={{ width: '16%' }}>Goodreads</th>
+            <th className="text-left pb-4 font-normal mobile-goodreads-col" style={{ width: '16%' }}>Goodreads</th>
           </tr>
         </thead>
         <tbody>
@@ -704,7 +765,7 @@ function BooksTable({ books }: { books: Book[] }) {
             const hasQuote = (book.quote || '').length > 0;
 
             if (isExpanded) {
-return (
+              return (
                 <tr
                   key={index}
                   className="clickable"
@@ -741,7 +802,6 @@ return (
                       >
                         ✕
                       </span>
-
                       <p
                         className="italic"
                         style={{
@@ -755,7 +815,6 @@ return (
                       >
                         &ldquo;{book.quote}&rdquo;
                       </p>
-
                       <p
                         style={{
                           color: 'var(--brown)',
@@ -806,9 +865,9 @@ return (
                   </span>
                 </td>
                 <td className="py-3 pr-8"><span style={cellStyle} className="italic">{book.author}</span></td>
-                <td className="py-3 pr-8"><span style={cellStyle}>{book.published}</span></td>
-                <td className="py-3 pr-8"><span style={cellStyle}>{book.yearRead}</span></td>
-                <td className="py-3 pr-4">
+                <td className="py-3 pr-8 desktop-only-col"><span style={cellStyle}>{book.published}</span></td>
+                <td className="py-3 pr-8 desktop-only-col"><span style={cellStyle}>{book.yearRead}</span></td>
+                <td className="py-3 pr-4 mobile-my-rating-col">
                   {activeRating === 'eoy' && !hasEOY ? (
                     <span style={{ color: 'var(--brown)', fontSize: '13px', opacity: 0.5 }}>—</span>
                   ) : (
@@ -820,7 +879,7 @@ return (
                     </span>
                   )}
                 </td>
-                <td className="py-3"><Stars rating={book.goodreads} /></td>
+                <td className="py-3 mobile-goodreads-col"><Stars rating={book.goodreads} /></td>
               </tr>
             );
           })}
