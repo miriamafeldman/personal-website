@@ -17,6 +17,14 @@ body {
   cursor: url("/cursors/astro_arrow.png") 0 0, auto !important;
 }
 
+/* ------------------ Gold link hover glow ------------------ */
+.link-gold-glow {
+  transition: text-shadow 0.2s ease;
+}
+.link-gold-glow:hover {
+  text-shadow: 0 0 8px rgba(246, 191, 39, 1), 0 0 20px rgba(246, 191, 39, 0.7);
+}
+
 /* ------------------ Links / home link colors ------------------ */
 .home-link {
   color: var(--black);
