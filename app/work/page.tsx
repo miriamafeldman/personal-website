@@ -23,8 +23,8 @@ export default function Home() {
           AI to R&D at the <a href="https://bcghendersoninstitute.com/" target="_blank" className="underline hover:font-bold" style={{ color: 'var(--blue)' }}>BCG Henderson Institute</a>.
         </p>
         <p className="text-gray-900 leading-relaxed mt-4">
-          I spend my spare hours focused on the intersection of
-          strategy and the arts. Since 2023, I've supported the creation of an Arts &
+          I spend my spare hours focused on the <a href="/writing" className="underline hover:font-bold" style={{ color: 'var(--red)' }}>intersection of
+          strategy and the arts</a>. Since 2023, I've supported the creation of an Arts &
           Culture-specific team in BCG's London office. Our excellent colleagues at the UK Centre for Growth recently
 published a report on the <a href="https://www.bcg.com/united-kingdom/centre-for-growth/insights/the-next-act-a-vision-for-the-uks-creative-future" target="_blank" className="underline hover:font-bold" style={{ color: 'var(--blue)' }}>state of the UK's cultural industries</a> which offers a clear
 statement of many of our priorities.
