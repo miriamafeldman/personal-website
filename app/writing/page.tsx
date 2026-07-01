@@ -1,42 +1,8 @@
-'use client';
+import { fetchPosts } from './data';
+import WritingClient from './WritingClient';
 
-import { useState } from 'react';
-
-const categories = ['Arts', 'Tech', 'Lit', 'Business'];
-
-function CategoryPill({
-  label,
-  active,
-  onClick,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className="clickable category-pill"
-      style={{
-        padding: '6px 18px',
-        borderRadius: '9999px',
-        border: '1.5px solid var(--red)',
-        backgroundColor: active ? 'var(--red)' : 'rgba(211, 64, 22, 0.1)',
-        color: active ? 'var(--offwhite)' : 'var(--red)',
-        fontWeight: 600,
-        fontSize: '0.75rem',
-        letterSpacing: '0.03em',
-        textTransform: 'uppercase',
-        transition: 'all 0.2s ease',
-      }}
-    >
-      {label}
-    </button>
-  );
-}
-
-export default function WritingPage() {
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+export default async function WritingPage() {
+  const posts = await fetchPosts();
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: 'var(--offwhite)' }}>
@@ -55,38 +21,12 @@ export default function WritingPage() {
           Opining on...
         </p>
 
-        <div
-          className="category-pills"
-          style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}
-        >
-          {categories.map((category) => (
-            <CategoryPill
-              key={category}
-              label={category}
-              active={activeCategory === category}
-              onClick={() =>
-                setActiveCategory(activeCategory === category ? null : category)
-              }
-            />
-          ))}
-        </div>
+        <WritingClient posts={posts} />
       </section>
 
       <footer className="text-center py-8 text-sm" style={{ color: 'var(--brown)' }}>
         © 2026 Miriam Ames Feldman
       </footer>
-
-      <style>{`
-        @media (max-width: 640px) {
-          .category-pills {
-            gap: 0.5rem !important;
-          }
-          .category-pill {
-            padding: 5px 10px !important;
-            font-size: 0.7rem !important;
-          }
-        }
-      `}</style>
     </main>
   );
 }
