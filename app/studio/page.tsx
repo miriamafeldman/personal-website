@@ -41,6 +41,20 @@ const projects: Project[] = [
       { name: 'Bisque', image: '' },
       { name: 'Glaze', image: 'glaze.png' },
     ],
+  },
+  {
+    id: 'yellow-bowls-2025',
+    name: '',
+    folder: '/studio/yellow-bowls-2025',
+    heroImage: 'bowl25.png',
+    stages: [
+      { name: 'Design', image: '' },
+      { name: 'Throw', image: 'throw.png' },
+      { name: 'Trim', image: 'trim.png' },
+      { name: 'Embellish', image: '' },
+      { name: 'Bisque', image: '' },
+      { name: 'Glaze', image: 'glaze.png' },
+    ],
   }
 ];
 
