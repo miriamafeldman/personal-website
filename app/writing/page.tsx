@@ -7,7 +7,7 @@ export default async function WritingPage() {
   return (
     <main className="min-h-screen" style={{ backgroundColor: 'var(--offwhite)' }}>
       <section className="py-16 px-6 text-center">
-        <h1 className="text-5xl font-bold text-gray-900 mb-8">Writing</h1>
+        <h1 className="text-5xl font-bold text-gray-900" style={{ marginBottom: '1.1rem' }}>At my desk</h1>
 
         <p
           style={{
