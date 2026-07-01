@@ -6,7 +6,7 @@ import { useMemo, useState, type CSSProperties } from "react";
 // ============================================
 // EXISTING PAGES - only these get clickable links
 // ============================================
-const existingPages = new Set(["/galleries", "/reading", "/work", "/studio"]);
+const existingPages = new Set(["/galleries", "/reading", "/work", "/studio", "/writing"]);
 
 type EventColor = "blue" | "red" | "olive" | "gold";
 
@@ -96,16 +96,17 @@ const calendarEvents: CalendarEvent[] = [
     statusActivity: "at a gallery",
   },
   {
-    id: "sun-flight",
+    id: "sun-writing",
     day: 0,
-    title: "Flight to...",
+    title: "Writing",
     time: "4:00-7:00",
     start: 16,
     end: 19,
+    href: "/writing",
     color: "red",
     primary: false,
     statusDay: "Sunday evening",
-    statusActivity: "in transit",
+    statusActivity: "outlining an article",
   },
   // MONDAY
   {
