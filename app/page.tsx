@@ -18,6 +18,7 @@ type CalendarEvent = {
   start: number;
   end: number;
   href?: string;
+  external?: boolean;
   color: EventColor;
   primary: boolean;
   statusDay: string;
@@ -275,7 +276,8 @@ const calendarEvents: CalendarEvent[] = [
     time: "3:00-7:00",
     start: 15,
     end: 19,
-    href: "/board-meeting",
+    href: "https://www.wacarts.co.uk/home/who-we-are/trustees",
+    external: true,
     color: "red",
     primary: true,
     statusDay: "Thursday afternoon",
@@ -458,7 +460,7 @@ export default function Home() {
       </>
     );
 
-    const hasLink = event.href && existingPages.has(event.href);
+    const hasLink = event.href && (event.external || existingPages.has(event.href));
 
     if (!hasLink) {
       return (
@@ -471,6 +473,23 @@ export default function Home() {
         >
           {content}
         </div>
+      );
+    }
+
+    if (event.external) {
+      return (
+        <a
+          key={event.id}
+          href={event.href!}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="calendar-card"
+          style={style}
+          onMouseEnter={() => { setHoveredId(event.id); setHoveredHref(event.href || null); }}
+          onMouseLeave={() => { setHoveredId(null); setHoveredHref(null); }}
+        >
+          {content}
+        </a>
       );
     }
 
@@ -562,7 +581,7 @@ export default function Home() {
 
         <div className="mobile-event-stack">
           {eventsByDay[mobileDay].map((event) => {
-            const hasLink = event.href && existingPages.has(event.href);
+            const hasLink = event.href && (event.external || existingPages.has(event.href));
             const style: CSSProperties = {
               ...getCardStyle(event),
               position: 'relative',
@@ -581,6 +600,21 @@ export default function Home() {
                 <div key={event.id} className="calendar-card" style={style}>
                   {content}
                 </div>
+              );
+            }
+
+            if (event.external) {
+              return (
+                <a
+                  key={event.id}
+                  href={event.href!}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="calendar-card"
+                  style={style}
+                >
+                  {content}
+                </a>
               );
             }
 
