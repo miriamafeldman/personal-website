@@ -369,16 +369,16 @@ function getDefaultStatus(now: Date): StatusLine {
   const day = now.getDay();
   const hour = now.getHours() + now.getMinutes() / 60;
 
-  if (day === 2 && hour >= 19 && hour <= 21) {
-    return { day: "Tuesday evening", activity: "taking me time", color: "olive" };
-  }
-
   if (day === 0 && hour < 12) {
     return { day: "Sunday morning", activity: "sitting down with the newspaper", color: "gold" };
   }
 
   if (day === 0 && hour >= 12 && hour < 16) {
     return { day: "Sunday afternoon", activity: "at the gallery", color: "olive" };
+  }
+
+  if (day === 0 && hour >= 16 && hour < 19) {
+    return { day: "Sunday evening", activity: "outlining an article", color: "red" };
   }
 
   if (day === 4 && hour >= 15 && hour < 19) {
@@ -389,7 +389,8 @@ function getDefaultStatus(now: Date): StatusLine {
     return { day: "Thursday evening", activity: "writing", color: "red" };
   }
 
-  if (day >= 1 && day <= 5 && hour >= 9 && hour < 18) {
+  const officeEnd = day === 1 || day === 3 ? 21 : 18;
+  if (day >= 1 && day <= 5 && hour >= 9 && hour < officeEnd) {
     return { day: dayLabels[day], activity: "at the office", color: "blue" };
   }
 

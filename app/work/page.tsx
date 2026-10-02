@@ -20,7 +20,7 @@ export default function Home() {
           Like many others, I believe we are on the cusp of major AI-driven
           changes to operating models across knowledge work, scientific discovery, and industrial
           contexts. With that in mind, I'll be spending this year researching innovation partnerships and applications of
-          AI to R&D at the <a href="https://bcghendersoninstitute.com/" target="_blank" className="underline hover:font-bold" style={{ color: 'var(--blue)' }}>BCG Henderson Institute</a>.
+          AI to R&D at the <a href="https://www.bcg.com/bcg-institute" target="_blank" className="underline hover:font-bold" style={{ color: 'var(--blue)' }}>BCG Institute</a>.
         </p>
         <p className="text-gray-900 leading-relaxed mt-4">
           I spend my spare hours focused on the <a href="/writing" className="underline hover:font-bold" style={{ color: 'var(--red)' }}>intersection of
