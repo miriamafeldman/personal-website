@@ -7,6 +7,8 @@ export type Category = (typeof ALL_CATEGORIES)[number];
 // miriamafeldman.substack.com/p/<slug>). Posts can carry multiple tags.
 // New posts default to no tags until added below.
 export const POST_CATEGORIES: Record<string, Category[]> = {
+  'sunday-in-the-park-with-claude': ['Arts', 'Lit', 'Tech'],
+  'why-did-alphabet-patent-a-fish-biomass': ['Tech', 'Business'],
   'no-art-at-tech-week': ['Tech', 'Arts', 'Business'],
   'assimilation-anxiety': ['Lit'],
   'red-white-and-cobalt-blue': ['Arts', 'Business'],
