@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
-const navItems = [
+export const navItems = [
   { label: 'Working', href: '/work', color: 'var(--blue)', width: '5em' },
   { label: 'Making', href: '/studio', color: 'var(--olive)', width: '4.8em' },
   { label: 'Reading', href: '/reading', color: 'var(--gold)', width: '5.2em' },
@@ -78,18 +78,20 @@ export default function NavBar() {
   );
 }
 
-function NavLink({
+export function NavLink({
   label,
   href,
   color,
   width,
   isActive,
+  align = 'right',
 }: {
   label: string;
   href: string;
   color: string;
   width: string;
   isActive: boolean;
+  align?: 'left' | 'center' | 'right';
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const showEffect = isHovered || isActive;
@@ -111,7 +113,7 @@ function NavLink({
         transition: 'color 0.2s ease',
         display: 'inline-block',
         width: width,
-        textAlign: 'right',
+        textAlign: align,
       }}
     >
       {showEffect ? (

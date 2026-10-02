@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState, type CSSProperties } from "react";
+import { NavLink, navItems } from "./components/NavBar";
 
 // ============================================
 // EXISTING PAGES - only these get clickable links
@@ -633,7 +634,29 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="text-center py-8 text-sm" style={{ color: 'var(--brown)' }}>
+      <nav
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: 'clamp(0.8rem, 2vw, 1.5rem)',
+          paddingTop: '2rem',
+        }}
+      >
+        {navItems.map((item) => (
+          <NavLink
+            key={item.href}
+            label={item.label}
+            href={item.href}
+            color={item.color}
+            width={item.width}
+            isActive={false}
+            align="center"
+          />
+        ))}
+      </nav>
+
+      <footer className="text-center py-8 text-sm" style={{ color: 'var(--brown)', opacity: 0.45 }}>
         © 2026 Miriam Ames Feldman
       </footer>
     </main>
